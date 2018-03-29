@@ -49,11 +49,41 @@ export default class Login extends React.Component {
             </View>
       </KeyboardAvoidingView>
     );
-  }
+    }
 
-  login = () => {
-      alert('test');
-  }
+    login = () => {
+        
+        this.props.navigation.navigate('Path');
+        
+        /*
+        fetch('http://147.87.116.42/api/v2/PatientPath/_table/Userpat?api_key=6114f88557b741a96a7beeffae51ee4908cedfbe887f5d562c2ccda9d9203c3b', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password,
+            })
+        })
+
+        .then((response) => response.json())
+        .then ((res) => {
+            if (res.success === true) {
+                AsyncStorage.setItem('user', res.user);
+                this.props.navigation.navigate('Path');
+            }
+            else {
+                alert(res.message);
+            }
+        })
+        .done();
+
+        */
+
+        
+    }
 }
 
 const styles = StyleSheet.create({
