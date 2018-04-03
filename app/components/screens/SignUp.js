@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-export default class Login extends React.Component {
+export default class LoginScreen extends React.Component {
 
     constructor(props) {
         super(props);
@@ -28,22 +28,27 @@ export default class Login extends React.Component {
     return (
       <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
             <View style={styles.container}>
-                <Text style={styles.header}> LOGIN </Text>
+                <Text style={styles.header}> Registrieren </Text>
                 <TextInput 
                     style={styles.textInput} placeholder='Username' 
-                    onChangeText={ (username) => this.setState({username}) }
                     underlineColorAndroid='transparent'
                 />
                 <TextInput 
                     style={styles.textInput} placeholder='Password' 
-                    onChangeText={ (password) => this.setState({password}) }
                     underlineColorAndroid='transparent'
+                    secureTextEntry={true}
+                />
+
+               <TextInput 
+                    style={styles.textInput} placeholder='Password again' 
+                    underlineColorAndroid='transparent'
+                    secureTextEntry={true}
                 />
 
                 <TouchableOpacity
                     style={styles.btn}
                     onPress={this.login}>
-                    <Text>Log in</Text>
+                    <Text>Registrieren</Text>
                 </TouchableOpacity>
 
             </View>
@@ -51,38 +56,8 @@ export default class Login extends React.Component {
     );
     }
 
-    login = () => {
-        
-        this.props.navigation.navigate('Path');
-        
-        /*
-        fetch('http://147.87.116.42/api/v2/PatientPath/_table/Userpat?api_key=6114f88557b741a96a7beeffae51ee4908cedfbe887f5d562c2ccda9d9203c3b', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: this.state.username,
-                password: this.state.password,
-            })
-        })
-
-        .then((response) => response.json())
-        .then ((res) => {
-            if (res.success === true) {
-                AsyncStorage.setItem('user', res.user);
-                this.props.navigation.navigate('Path');
-            }
-            else {
-                alert(res.message);
-            }
-        })
-        .done();
-
-        */
-
-        
+    signUp = () => {
+        alert("signUp not implemented yet");
     }
 }
 
@@ -115,6 +90,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#01c853',
         padding: 20,
         alignItems: 'center',
+    },
+    btn2: {
+        alignSelf: 'stretch',
+        backgroundColor: 'yellow',
+        padding: 20,
+        alignItems: 'center',
+        marginTop: 10,
     }
 });
 
