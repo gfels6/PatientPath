@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, StatusBar } from "react-native";
+import { Platform, StatusBar, View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import {
   StackNavigator,
   TabNavigator,
@@ -13,6 +13,19 @@ import Path from "./screens/Path";
 import Calendar from "./screens/Calendar";
 import Institution from "./screens/Institution";
 import LogOut from "./screens/LogOut";
+
+const DrawerButton = (props) => {
+	return (
+    <View>
+      <TouchableOpacity onPress={() => {props.navigation.navigate('DrawerOpen')}}>
+        <Image
+          source={require('../img/hamburger.png')}
+          style={styles.icon}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
@@ -35,19 +48,71 @@ export const SignedOut = StackNavigator({
   }
 });
 
+  const PathStack = StackNavigator(
+  {
+    Path: { 
+      screen: Path,
+    },
+  },
+  {
+    navigationOptions: ({navigation}) => ({
+      headerLeft: <DrawerButton navigation={navigation} />,
+    }),
+  }
+  );
+
+  const InstitutionStack = StackNavigator(
+  {
+    Institution: { 
+      screen: Institution,
+    },
+  },
+  {
+    navigationOptions: ({navigation}) => ({
+      headerLeft: <DrawerButton navigation={navigation} />,
+    }),
+  }
+  );  
+
+  const CalendarStack = StackNavigator(
+  {
+    Calendar: { 
+      screen: Calendar,
+    },
+  },
+  {
+    navigationOptions: ({navigation}) => ({
+      headerLeft: <DrawerButton navigation={navigation} />,
+    }),
+  }
+  );
+
+  const LogOutStack = StackNavigator(
+  {
+    LogOut: { 
+      screen: LogOut,
+    },
+  },
+  {
+    navigationOptions: ({navigation}) => ({
+       headerLeft: <DrawerButton navigation={navigation} />,
+  }),
+  }
+  );      
+
 export const SignedIn = DrawerNavigator(
   {
     Path: {
-      screen: Path,
+      screen: PathStack,
     },
     Calendar: {
-      screen: Calendar,
+      screen: CalendarStack,
     },
     Institution: {
-      screen: Institution,
+      screen: InstitutionStack,
     },
     LogOut: {
-      screen: LogOut,
+      screen: LogOutStack,
     },
   },
   {
@@ -71,3 +136,9 @@ export const createRootNavigator = (signedIn = false) => {
     }
   );
 };
+
+const styles = StyleSheet.create({
+  icon: {
+    marginLeft: 10,
+  },
+});

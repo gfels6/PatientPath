@@ -12,18 +12,6 @@ export default class LoginScreen extends React.Component {
         }
     }
 
-    componentDidMount(){
-        this._loadInitialState().done();
-    }
-
-    _loadInitialState = async () => {
-        var value = await AsyncStorage.getItem('user');
-        if (value !== null) {
-            this.props.navigation.navigate('Profile');
-        }
-    }
-
-
     render() {
     return (
       <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
@@ -47,7 +35,7 @@ export default class LoginScreen extends React.Component {
 
                 <TouchableOpacity
                     style={styles.btn}
-                    onPress={this.login}>
+                    onPress={this.signUp}>
                     <Text>Registrieren</Text>
                 </TouchableOpacity>
 

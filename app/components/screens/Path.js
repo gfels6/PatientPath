@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View} from 'react-native';
-import Timeline from 'react-native-timeline-listview'
+import { StyleSheet, Text, View, Header, Button} from 'react-native';
+import Timeline from 'react-native-timeline-listview';
 
 export default class Path extends React.Component {
 
