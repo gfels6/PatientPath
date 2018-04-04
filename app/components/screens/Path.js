@@ -7,11 +7,28 @@ export default class Path extends React.Component {
     constructor(){
         super()
         this.data = [
-          {time: '09:00', title: 'Hausarzt', description: ''},
+          {time: '20:00', title: 'Hausarzt', description: ''},
           {time: '10:45', title: 'Radiologiecenter', description: ''},
           {time: '12:00', title: 'Spezialist', description: ''},
           {time: '14:00', title: 'Spitaleintritt', description: ''},
           {time: '16:30', title: 'Spitalaustritt', description: ''}
+        ]
+        //ist das JSON Format
+        this.appointments = [
+            {
+                aid: 2,
+                name: "Untersuchung Hausarzt",
+                description: "Untersuchung wegen starken Hüftschmerzen",
+                startdate: "2018-06-05T08:00:00.000Z",
+                enddate: "2018-06-05T08:45:00.000Z",
+                patid: 1,
+                instid: 1,
+                practid: null,
+                episodeid: 1,
+                chklstid: null,
+                createdAt: "2018-03-30T14:24:24.000Z",
+                updatedAt: "2018-03-30T16:54:56.000Z"
+            }
         ]
       } 
 

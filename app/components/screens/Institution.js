@@ -7,6 +7,7 @@ export default class Institution extends React.Component {
     return (
             <View style={styles.container}>
                 <Text style={styles.text}> Institution </Text>
+                <Text style={styles.text}> Hier werden in Zukunft die Institutionen der User angezeigt </Text>
             </View>
     );
     }

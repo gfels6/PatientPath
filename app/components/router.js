@@ -10,7 +10,7 @@ import {
 import LoginScreen from "./screens/LoginScreen";
 import SignUp from "./screens/SignUp";
 import Path from "./screens/Path";
-import Calendar from "./screens/Calendar";
+import Cal from "./screens/Cal";
 import Institution from "./screens/Institution";
 import LogOut from "./screens/LogOut";
 
@@ -74,10 +74,10 @@ export const SignedOut = StackNavigator({
   }
   );  
 
-  const CalendarStack = StackNavigator(
+  const CalStack = StackNavigator(
   {
-    Calendar: { 
-      screen: Calendar,
+    Cal: { 
+      screen: Cal,
     },
   },
   {
@@ -105,8 +105,8 @@ export const SignedIn = DrawerNavigator(
     Path: {
       screen: PathStack,
     },
-    Calendar: {
-      screen: CalendarStack,
+    Cal: {
+      screen: CalStack,
     },
     Institution: {
       screen: InstitutionStack,
