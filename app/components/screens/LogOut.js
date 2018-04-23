@@ -7,8 +7,6 @@ export default class LogOut extends React.Component {
     render() {
     return (
             <View style={styles.container}>
-                <Text style={styles.text}> LogOut </Text>
-
                  <TouchableOpacity
                     style={styles.btn}
                     onPress={() => {
@@ -34,5 +32,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#01c853',
         padding: 20,
         alignItems: 'center',
+        marginTop: 20,
     },
 });

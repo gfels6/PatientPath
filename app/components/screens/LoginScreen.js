@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage} from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage, ToastAndroid} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { onSignIn } from "../auth";
 
@@ -12,18 +12,6 @@ export default class LoginScreen extends React.Component {
             password: '',
         }
     }
-
-    componentDidMount(){
-        this._loadInitialState().done();
-    }
-
-    _loadInitialState = async () => {
-        var value = await AsyncStorage.getItem('user');
-        if (value !== null) {
-            this.props.navigation.navigate('Profile');
-        }
-    }
-
 
     render() {
     return (
@@ -44,9 +32,7 @@ export default class LoginScreen extends React.Component {
 
                 <TouchableOpacity
                     style={styles.btn}
-                    onPress={() => {
-                        onSignIn().then(() => this.props.navigation.navigate("SignedIn"));
-                      }}>
+                    onPress={this.logIn}>
                     <Text>Log in</Text>
                 </TouchableOpacity>
 
@@ -71,15 +57,11 @@ export default class LoginScreen extends React.Component {
         this.props.navigation.navigate('Path');
     }
 
-    login = () => {
+    logIn = () => {
         
-        alert("not implemented yet!");
-        
-        /*
-        fetch('http://147.87.116.42/api/v2/PatientPath/_table/Userpat?api_key=6114f88557b741a96a7beeffae51ee4908cedfbe887f5d562c2ccda9d9203c3b', {
+        fetch('http://147.87.116.42:54321/login/patient', {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -87,21 +69,24 @@ export default class LoginScreen extends React.Component {
                 password: this.state.password,
             })
         })
-
         .then((response) => response.json())
         .then ((res) => {
-            if (res.success === true) {
-                AsyncStorage.setItem('user', res.user);
+            if (res.token) {
+                AsyncStorage.setItem("TOKEN", res.token);
+                console.log(res.token);
                 this.props.navigation.navigate('Path');
+                ToastAndroid.showWithGravity(
+                    'Login erfolgreich!',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER
+                );
+    
             }
             else {
-                alert(res.message);
+                alert("Login nicht erfolgreich!");
             }
         })
         .done();
-
-        */
-
         
     }
 }
