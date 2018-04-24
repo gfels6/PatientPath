@@ -9,31 +9,30 @@ export default class Path extends React.Component {
         this.state = {
             ready: false,
         }
-        //ist das JSON Format
+        this.getToken();
     }
 
+    /*
     componentWillMount() {
         this.getToken(); 
-    }
+    } */
 
     calcNextAppo() {
         return "20";
     }
 
     getToken = async () => {
-
         const token = await AsyncStorage.getItem('token');
+        console.log("token in getToken: " + token);
         this.getAppo(token);
-
     }
 
     getAppo = (tok) => {
-
+        
         fetch('http://147.87.116.42:54321/appointment/full', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'patid': '1',
                 'token': tok,
             },
          })
@@ -43,8 +42,7 @@ export default class Path extends React.Component {
             this.newData = res;
             this.setState ({ ready: true });
         })
-        .done(); 
-
+        .done();  
     }
 
     render() {
@@ -55,7 +53,6 @@ export default class Path extends React.Component {
                 <View style={styles.container}>
                     <Text style={styles.text}> Ihr Ablauf ist wie folgt: </Text>
                     <View style={styles.pathCont}>
-
                         <Timeline 
                         style={styles.list}
                         data={this.newData}
@@ -69,7 +66,6 @@ export default class Path extends React.Component {
                         }}
                         innerCircle={'dot'}
                         />
-                        
                     </View>
                     <Text style={styles.text}> Noch {this.calcNextAppo()} Tage bis zum nächsten Termin.</Text>
                 </View>

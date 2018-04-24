@@ -72,8 +72,8 @@ export default class LoginScreen extends React.Component {
         .then((response) => response.json())
         .then ((res) => {
             if (res.token) {
-                AsyncStorage.setItem("TOKEN", res.token);
-                console.log(res.token);
+                AsyncStorage.setItem('token', res.token);
+                console.log("result from  loginfetch: " + res.token);
                 this.props.navigation.navigate('Path');
                 ToastAndroid.showWithGravity(
                     'Login erfolgreich!',

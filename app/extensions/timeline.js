@@ -99,9 +99,7 @@ export default class Timeline extends Component {
     const lineWidth = rowData.lineWidth
       ? rowData.lineWidth
       : this.props.lineWidth;
-    const isLast = this.props.renderFullLine
-      ? !this.props.renderFullLine
-      : this.state.data.slice(-1)[0] === rowData;
+    const isLast = this.props.renderFullLine ? !this.props.renderFullLine : this.state.data.slice(-1)[0] === rowData;
     const lineColor = isLast
       ? "rgba(0,0,0,0)"
       : rowData.lineColor ? rowData.lineColor : this.props.lineColor;
