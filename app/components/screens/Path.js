@@ -10,68 +10,14 @@ export default class Path extends React.Component {
             ready: false,
         }
         //ist das JSON Format
-        this.appointments = [
-            {
-                aid: 2,
-                name: "Untersuchung Hausarzt",
-                description: "Untersuchung wegen starken Hüftschmerzen",
-                startdate: "2018-06-05T08:00:00.000Z",
-                enddate: "2018-06-05T08:45:00.000Z",
-                patid: 1,
-                instid: 1,
-                practid: null,
-                episodeid: 1,
-                chklstid: null,
-                createdAt: "2018-03-30T14:24:24.000Z",
-                updatedAt: "2018-03-30T16:54:56.000Z"
-            },
-            {
-                aid: 2,
-                name: "Radiologiecenter",
-                description: "MRI der Hüfte",
-                startdate: "2018-06-05T08:00:00.000Z",
-                enddate: "2018-06-05T08:45:00.000Z",
-                patid: 1,
-                instid: 1,
-                practid: null,
-                episodeid: 1,
-                chklstid: null,
-                createdAt: "2018-03-30T14:24:24.000Z",
-                updatedAt: "2018-03-30T16:54:56.000Z"
-            },
-            {
-                aid: 2,
-                name: "Untersuchung Hüftspezialist",
-                description: "Abklärungen Operation",
-                startdate: "2018-06-05T08:00:00.000Z",
-                enddate: "2018-06-05T08:45:00.000Z",
-                patid: 1,
-                instid: 1,
-                practid: null,
-                episodeid: 1,
-                chklstid: null,
-                createdAt: "2018-03-30T14:24:24.000Z",
-                updatedAt: "2018-03-30T16:54:56.000Z"
-            },
-            {
-                aid: 2,
-                name: "Spitaleintritt",
-                description: "",
-                startdate: "2018-06-05T08:00:00.000Z",
-                enddate: "2018-06-05T08:45:00.000Z",
-                patid: 1,
-                instid: 1,
-                practid: null,
-                episodeid: 1,
-                chklstid: null,
-                createdAt: "2018-03-30T14:24:24.000Z",
-                updatedAt: "2018-03-30T16:54:56.000Z"
-            }
-        ]
     }
 
     componentWillMount() {
         this.getToken(); 
+    }
+
+    calcNextAppo() {
+        return "20";
     }
 
     getToken = async () => {
@@ -83,7 +29,7 @@ export default class Path extends React.Component {
 
     getAppo = (tok) => {
 
-        fetch('http://147.87.116.42:54321/appointment', {
+        fetch('http://147.87.116.42:54321/appointment/full', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,8 +62,6 @@ export default class Path extends React.Component {
                         circleSize={20}
                         circleColor='rgb(0,0,139)'
                         lineColor='rgb(0,0,139)'
-                        timeContainerStyle={{minWidth:52, marginTop: -5}}
-                        timeStyle={{textAlign: 'center', backgroundColor:'#ff9797', color:'white', padding:5, borderRadius:13}}
                         descriptionStyle={{color:'gray'}}
                         showTime={false}
                         options={{
@@ -127,6 +71,7 @@ export default class Path extends React.Component {
                         />
                         
                     </View>
+                    <Text style={styles.text}> Noch {this.calcNextAppo()} Tage bis zum nächsten Termin.</Text>
                 </View>
             );
         }

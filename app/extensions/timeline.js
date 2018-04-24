@@ -52,6 +52,18 @@ export default class Timeline extends Component {
     });
   }
 
+  convertTime(dateString) {
+    let day,month,year,hour,minute;
+    
+    year = dateString.slice(0,4);
+    month = dateString.slice(5,7);
+    day = dateString.slice(8,10);
+    hour = dateString.slice(11,13);
+    minute = dateString.slice(14,16);
+    
+    return day + "." + month + "." + year + " " + hour + ":" + minute;
+  }
+
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
@@ -130,18 +142,21 @@ export default class Timeline extends Component {
   }
 
   _renderDetail(rowData, sectionID, rowID) {
-    let name = rowData.description ? (
+    let name = (
       <View>
+        <View>
         <Text style={[styles.name, this.props.nameStyle]}>
           {rowData.name}
         </Text>
-        <Text style={[styles.description, this.props.descriptionStyle]}>
-          {rowData.description}
+        <Text style={[styles.institution, this.props.institutionStyle]}>
+          {rowData.institution.name}
         </Text>
-      </View>
-    ) : (
-      <Text style={[styles.name, this.props.nameStyle]}>{rowData.name}</Text>
-    );
+        <Text style={[styles.date, this.props.dateStyle]}>
+          {this.convertTime(rowData.startdate)}
+        </Text>
+        </View>
+    </View>
+    )
     return <View style={styles.container}>{name}</View>;
   }
 
@@ -248,16 +263,30 @@ const styles = StyleSheet.create({
   details: {
     borderLeftWidth: defaultLineWidth,
     flexDirection: "column",
-    flex: 1
+    flex: 1,
   },
-  detail: { paddingTop: 0, paddingBottom: 10 },
-  description: {
-    marginTop: 10
+  detail: { 
+    paddingTop: 0, 
+    paddingBottom: 10,
+  },
+  institution: {
+    marginTop: 4,
+    color: "#555",
+  },
+  date: {
+    marginTop: 3,
+    color: "#555",
   },
   separator: {
     height: 1,
-    backgroundColor: "#aaa",
+    backgroundColor: "#a00",
     marginTop: 10,
     marginBottom: 10
-  }
+  },
+  tryHard: {
+    flexDirection: "column",
+    flex: 1,
+    //alignItems: 'stretch',
+    justifyContent: "center"
+  },
 });
