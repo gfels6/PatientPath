@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Header, Button, AsyncStorage, TouchableOpacity,} from 'react-native';
-import Timeline from 'react-native-timeline-listview';
+import Timeline from '../../extensions/timeline';
 
 export default class Path extends React.Component {
 
