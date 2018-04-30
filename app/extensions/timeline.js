@@ -1,14 +1,8 @@
 "use strict";
 
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  ListView,
-  Image,
-  View,
-  Text,
-  TouchableOpacity
-} from "react-native";
+import {StyleSheet, ListView, Image, View, Text, TouchableOpacity, TouchableWithoutFeedback,} from "react-native";
+import { StackNavigator, withNavigation } from 'react-navigation';
 
 const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,
@@ -23,8 +17,8 @@ const defaultDotColor = "white";
 const defaultInnerCircle = "none";
 
 export default class Timeline extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this._renderRow = this._renderRow.bind(this);
     this.renderDetail = (this.props.renderDetail
@@ -45,6 +39,12 @@ export default class Timeline extends Component {
     };
   }
 
+  routingToAppo = (data) => {
+    //console.log(data.aid);
+    //this.props.navigation.navigate({ routeName: 'Appointment',  params: { category: '2' } });
+    this.props.callbackFromParent(data);
+  } 
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       data: nextProps.data,
@@ -64,7 +64,8 @@ export default class Timeline extends Component {
     return day + "." + month + "." + year + " " + hour + ":" + minute;
   }
 
-  render() {
+   render() {
+    
     return (
       <View style={[styles.container, this.props.style]}>
         <ListView
@@ -130,9 +131,12 @@ export default class Timeline extends Component {
             this.props.onEventPress ? this.props.onEventPress(rowData) : null
           }
         >
+          
           <View style={styles.detail}>
             {this.renderDetail(rowData, sectionID, rowID)}
           </View>
+          
+          
           {this._renderSeparator()}
         </TouchableOpacity>
       </View>
@@ -140,8 +144,9 @@ export default class Timeline extends Component {
   }
 
   _renderDetail(rowData, sectionID, rowID) {
-    let name = (
-      <View>
+    let name = !rowData.chklstid ? (
+      <TouchableWithoutFeedback onPressIn={() => this.routingToAppo(rowData)}>
+       <View>
         <View>
         <Text style={[styles.name, this.props.nameStyle]}>
           {rowData.name}
@@ -153,7 +158,27 @@ export default class Timeline extends Component {
           {this.convertTime(rowData.startdate)}
         </Text>
         </View>
-    </View>
+      </View>
+      </TouchableWithoutFeedback>
+    ) : (
+      <TouchableWithoutFeedback onPressIn={() => this.routingToAppo(rowData)}>
+        <View>
+        <View>
+        <Text style={[styles.name, this.props.nameStyle]}>
+          {rowData.name}
+        </Text>
+        <Text style={[styles.institution, this.props.institutionStyle]}>
+          {rowData.institution.name}
+        </Text>
+        <Text style={[styles.date, this.props.dateStyle]}>
+          {this.convertTime(rowData.startdate)}
+        </Text>
+        <Text style={[styles.date, this.props.dateStyle]}>
+          hat eine Checklist
+        </Text>
+        </View>
+      </View>
+      </TouchableWithoutFeedback>
     )
     return <View style={styles.container}>{name}</View>;
   }

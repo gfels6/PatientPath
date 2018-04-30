@@ -2,7 +2,6 @@ import React from "react";
 import { Platform, StatusBar, View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import {
   StackNavigator,
-  TabNavigator,
   SwitchNavigator,
   DrawerNavigator,
 } from "react-navigation";
@@ -13,6 +12,7 @@ import Path from "./screens/Path";
 import Cal from "./screens/Cal";
 import Institution from "./screens/Institution";
 import LogOut from "./screens/LogOut";
+import Appointment from "./screens/Appointment";
 
 const DrawerButton = (props) => {
 	return (
@@ -48,16 +48,36 @@ export const SignedOut = StackNavigator({
   }
 });
 
+  const AppoStack = StackNavigator(
+    {
+      Appointment: { 
+        screen: Appointment,
+        title: "Pfad",
+      },
+    },
+    {
+      navigationOptions: ({navigation}) => ({
+        headerLeft: <DrawerButton navigation={navigation} />,
+      }),
+    }
+  );
+
   const PathStack = StackNavigator(
   {
     Path: { 
       screen: Path,
+      title: "Pfad",
     },
+    Appointment: {
+      screen: Appointment,
+      title: "lol",
+    }
   },
   {
     navigationOptions: ({navigation}) => ({
       headerLeft: <DrawerButton navigation={navigation} />,
     }),
+    initialRouteName: 'Path',
   }
   );
 
@@ -104,6 +124,7 @@ export const SignedIn = DrawerNavigator(
   {
     Path: {
       screen: PathStack,
+      title: "Pfad",
     },
     Cal: {
       screen: CalStack,
@@ -135,7 +156,7 @@ export const createRootNavigator = (signedIn = false) => {
       initialRouteName: signedIn ? "SignedIn" : "SignedOut"
     }
   );
-};
+}; 
 
 const styles = StyleSheet.create({
   icon: {

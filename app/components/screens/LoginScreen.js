@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage, ToastAndroid} from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { onSignIn } from "../auth";
+import { isSignedIn } from "../auth";
 
 export default class LoginScreen extends React.Component {
 
@@ -11,6 +11,43 @@ export default class LoginScreen extends React.Component {
             username: '',
             password: '',
         }
+    }
+
+    skip = () => {
+        this.props.navigation.navigate('Path');
+    }
+
+    logIn = () => {
+        
+        fetch('http://147.87.116.42:54321/login/patient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password,
+            })
+        })
+        .then((response) => response.json())
+        .then ((resp) => {
+            if (resp.token) {
+                AsyncStorage.setItem('token', resp.token);
+                console.log("result from loginfetch: " + resp.token);
+                this.props.navigation.navigate('Path');
+                ToastAndroid.showWithGravity(
+                    'Login erfolgreich!',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER
+                );
+    
+            }
+            else {
+                alert("Login nicht erfolgreich!");
+            }
+        })
+        .done();
+        
     }
 
     render() {
@@ -51,43 +88,6 @@ export default class LoginScreen extends React.Component {
             </View>
       </KeyboardAvoidingView>
     );
-    }
-
-    skip = () => {
-        this.props.navigation.navigate('Path');
-    }
-
-    logIn = () => {
-        
-        fetch('http://147.87.116.42:54321/login/patient', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: this.state.username,
-                password: this.state.password,
-            })
-        })
-        .then((response) => response.json())
-        .then ((res) => {
-            if (res.token) {
-                AsyncStorage.setItem('token', res.token);
-                console.log("result from  loginfetch: " + res.token);
-                this.props.navigation.navigate('Path');
-                ToastAndroid.showWithGravity(
-                    'Login erfolgreich!',
-                    ToastAndroid.SHORT,
-                    ToastAndroid.CENTER
-                );
-    
-            }
-            else {
-                alert("Login nicht erfolgreich!");
-            }
-        })
-        .done();
-        
     }
 }
 
