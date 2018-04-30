@@ -11,7 +11,7 @@ import SignUp from "./screens/SignUp";
 import Path from "./screens/Path";
 import Cal from "./screens/Cal";
 import Institution from "./screens/Institution";
-import LogOut from "./screens/LogOut";
+import Profile from "./screens/Profile";
 import Appointment from "./screens/Appointment";
 
 const DrawerButton = (props) => {
@@ -19,7 +19,7 @@ const DrawerButton = (props) => {
     <View>
       <TouchableOpacity onPress={() => {props.navigation.navigate('DrawerOpen')}}>
         <Image
-          source={require('../img/hamburger.png')}
+          source={require('../img/hamburgerW.png')}
           style={styles.icon}
         />
       </TouchableOpacity>
@@ -34,20 +34,20 @@ const headerStyle = {
 export const SignedOut = StackNavigator({
   LoginScreen: {
     screen: LoginScreen,
-    navigationOptions: {
-      title: "LoginScreen",
-      headerStyle
-    }
   },
   SignUp: {
     screen: SignUp,
+  },
+},
+  {
+    headerMode: 'none',
     navigationOptions: {
-      title: "SignUp",
-      headerStyle
+      headerVisible: false,
     }
-  }
-});
+   },
+);
 
+ /*
   const AppoStack = StackNavigator(
     {
       Appointment: { 
@@ -60,7 +60,7 @@ export const SignedOut = StackNavigator({
         headerLeft: <DrawerButton navigation={navigation} />,
       }),
     }
-  );
+  ); */
 
   const PathStack = StackNavigator(
   {
@@ -76,7 +76,18 @@ export const SignedOut = StackNavigator({
   {
     navigationOptions: ({navigation}) => ({
       headerLeft: <DrawerButton navigation={navigation} />,
-    }),
+      headerStyle: {
+        backgroundColor: '#4682b4',
+      },
+      headerTitleStyle: {
+          color: 'white',
+      },
+      headerBackTitleStyle: {
+          color: 'white',
+      },
+      headerTintColor: 'white',
+      }),
+
     initialRouteName: 'Path',
   }
   );
@@ -90,6 +101,16 @@ export const SignedOut = StackNavigator({
   {
     navigationOptions: ({navigation}) => ({
       headerLeft: <DrawerButton navigation={navigation} />,
+      headerStyle: {
+        backgroundColor: '#4682b4',
+      },
+      headerTitleStyle: {
+          color: 'white',
+      },
+      headerBackTitleStyle: {
+          color: 'white',
+      },
+      headerTintColor: 'white',
     }),
   }
   );  
@@ -103,41 +124,61 @@ export const SignedOut = StackNavigator({
   {
     navigationOptions: ({navigation}) => ({
       headerLeft: <DrawerButton navigation={navigation} />,
+      headerStyle: {
+        backgroundColor: '#4682b4',
+      },
+      headerTitleStyle: {
+          color: 'white',
+      },
+      headerBackTitleStyle: {
+          color: 'white',
+      },
+      headerTintColor: 'white',
     }),
   }
   );
 
-  const LogOutStack = StackNavigator(
+  const ProfileStack = StackNavigator(
   {
-    LogOut: { 
-      screen: LogOut,
+    Profile: { 
+      screen: Profile,
     },
   },
   {
     navigationOptions: ({navigation}) => ({
        headerLeft: <DrawerButton navigation={navigation} />,
+       headerStyle: {
+        backgroundColor: '#4682b4',
+      },
+      headerTitleStyle: {
+          color: 'white',
+      },
+      headerBackTitleStyle: {
+          color: 'white',
+      },
+      headerTintColor: 'white',
   }),
   }
   );      
 
 export const SignedIn = DrawerNavigator(
   {
-    Path: {
+    Pfad: {
       screen: PathStack,
       title: "Pfad",
     },
-    Cal: {
+    Kalender: {
       screen: CalStack,
     },
     Institution: {
       screen: InstitutionStack,
     },
-    LogOut: {
-      screen: LogOutStack,
+    Profil: {
+      screen: ProfileStack,
     },
   },
   {
-    initialRouteName: 'Path',
+    initialRouteName: 'Pfad',
     drawerPosition: 'left',
   }
 );

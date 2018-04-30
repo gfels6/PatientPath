@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: defaultDotColor
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold"
   },
   details: {
@@ -295,10 +295,12 @@ const styles = StyleSheet.create({
   institution: {
     marginTop: 4,
     color: "#555",
+    fontSize: 16,
   },
   date: {
     marginTop: 3,
     color: "#555",
+    fontSize: 16,
   },
   separator: {
     height: 1,

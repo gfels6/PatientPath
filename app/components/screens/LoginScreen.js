@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage, ToastAndroid} from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage, ToastAndroid, Image} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { isSignedIn } from "../auth";
 
@@ -43,7 +43,7 @@ export default class LoginScreen extends React.Component {
     
             }
             else {
-                alert("Login nicht erfolgreich!");
+                alert("Login nicht erfolgreich. Benutzername oder Passwort falsch!");
             }
         })
         .done();
@@ -53,39 +53,41 @@ export default class LoginScreen extends React.Component {
     render() {
     return (
       <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
+
             <View style={styles.container}>
-                <Text style={styles.header}> LOGIN </Text>
-                <TextInput 
-                    style={styles.textInput} placeholder='Username' 
-                    onChangeText={ (username) => this.setState({username}) }
-                    underlineColorAndroid='transparent'
-                />
-                <TextInput 
-                    style={styles.textInput} placeholder='Password' 
-                    onChangeText={ (password) => this.setState({password}) }
-                    underlineColorAndroid='transparent'
-                    secureTextEntry={true}
-                />
+                <View style={styles.picContainer}>
+                    <Image  style={{width:70, height: 70}}
+                        source={require('../../img/route.png')}/>
+                    <Text style={styles.logoText}>Willkommen bei PatientPath!</Text>	
+                </View>
 
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={this.logIn}>
-                    <Text>Log in</Text>
-                </TouchableOpacity>
+                <View style={styles.formContainer}>
+                    <TextInput 
+                        style={styles.inputBox} placeholder='Benutzername' 
+                        onChangeText={ (username) => this.setState({username}) }
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        placeholderTextColor = "#ffffff" 
+                    />
+                    <TextInput 
+                        style={styles.inputBox} placeholder='Passwort' 
+                        onChangeText={ (password) => this.setState({password}) }
+                        secureTextEntry={true}
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        placeholderTextColor = "#ffffff"
+                    />
 
-                <TouchableOpacity
-                    style={styles.btn2}
-                    onPress={() => this.props.navigation.navigate("SignUp")}>
-                    <Text>Sign UP</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={this.logIn}>
+                        <Text style={styles.buttonText}>Einloggen</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={styles.btn2}
-                    onPress={this.skip}>
-                    <Text>Skip LogIn</Text>
-                </TouchableOpacity>
+                </View>
 
-            </View>
+	    		<View style={styles.signupTextCont}>
+					<Text style={styles.signupText}>Noch kein Account?</Text>
+					<TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Registrieren</Text></TouchableOpacity>
+				</View>
+			</View>	
+
       </KeyboardAvoidingView>
     );
     }
@@ -95,38 +97,66 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
     },
-    container: {
+
+    picContainer : {
+        flexGrow: 1,
+        justifyContent:'flex-end',
+        alignItems: 'center'
+      },
+      logoText : {
+          marginVertical: 15,
+          fontSize:18,
+          color:'rgba(255, 255, 255, 0.7)'
+      },
+      container : {
+        backgroundColor:'#4682b4',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#2896d3',
-        paddingLeft: 40,
-        paddingRight: 40,
-    },
-    header: {
-        fontSize: 24,
-        marginBottom: 60,
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    textInput: {
-        alignSelf: 'stretch',
-        padding: 16,
-        marginBottom: 20,
-        backgroundColor: '#fff',
-    },
-    btn: {
-        alignSelf: 'stretch',
-        backgroundColor: '#01c853',
-        padding: 20,
-        alignItems: 'center',
-    },
-    btn2: {
-        alignSelf: 'stretch',
-        backgroundColor: 'yellow',
-        padding: 20,
-        alignItems: 'center',
-        marginTop: 10,
-    }
+        alignItems:'center',
+        justifyContent :'center'
+      },
+      signupTextCont : {
+          flexGrow: 1,
+        alignItems:'flex-end',
+        justifyContent :'center',
+        paddingVertical:16,
+        flexDirection:'row'
+      },
+      signupText: {
+          color:'rgba(255,255,255,0.6)',
+          fontSize:16
+      },
+      signupButton: {
+          color:'#ffffff',
+          fontSize:16,
+          fontWeight:'500'
+      },
+      formContainer : {
+        flexGrow: 1,
+        justifyContent:'center',
+        alignItems: 'center'
+      },
+    
+      inputBox: {
+        width:300,
+        backgroundColor:'rgba(255, 255,255,0.2)',
+        borderRadius: 25,
+        paddingHorizontal:16,
+        fontSize:16,
+        color:'#ffffff',
+        marginVertical: 10
+      },
+      button: {
+        width:300,
+        backgroundColor:'#1c313a',
+         borderRadius: 25,
+          marginVertical: 10,
+          paddingVertical: 13
+      },
+      buttonText: {
+        fontSize:16,
+        fontWeight:'500',
+        color:'#ffffff',
+        textAlign:'center'
+      }
 });
 

@@ -16,13 +16,12 @@ export default class Cal extends React.Component {
     render() {
     return (
             <View style={styles.container}>
-                <Text style={styles.text}> Here comes the calendar. </Text>
+                <Text style={styles.text}> Mögliche Kalenderansicht (kann) </Text>
                 <Calendar
                         style={styles.calendar}
                         current={'2018-04-04'}
                         minDate={'2018-01-01'}
                         maxDate={'2018-12-31'}
-                        showWeekNumbers={true}
                         firstDay={1}
                         markedDates={{
                             '2018-04-07': {marked: true},

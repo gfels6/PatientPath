@@ -38,17 +38,28 @@ export default class Path extends React.Component {
             }
         }
         //console.log("closest ms: " + tempCloseMs);
-        console.log("in days: " + Math.ceil(tempCloseMs / one_day));
+        //console.log("in days: " + Math.ceil(tempCloseMs / one_day));
         return Math.ceil(tempCloseMs / one_day);
+    }
+
+    convertTime(dateString) {
+        let day,month,year,hour,minute;
+        
+        year = dateString.slice(0,4);
+        month = dateString.slice(5,7);
+        day = dateString.slice(8,10);
+        hour = dateString.slice(11,13);
+        minute = dateString.slice(14,16);
+        
+        return day + "." + month + "." + year + " " + hour + ":" + minute;
     }
 
     checkDates = () => {
         for(let aid of this.newData) {
-            console.log(aid.modified)
             if(aid.modified === true) {
                 Alert.alert(
                     'Achtung Datumswechsel!',
-                    'Das Datum für den Termin "' + aid.name + '" hat auf das Datum ' + aid.startdate + ' gewechselt.',
+                    'Das Datum für den Termin "' + aid.name + '" hat auf das Datum ' + this.convertTime(aid.startdate) + ' gewechselt.',
                     [
                       {text: 'Später', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
                       {text: 'Verstanden', onPress: () => console.log('ok pressed')},
@@ -80,8 +91,8 @@ export default class Path extends React.Component {
             })
             .then((response) => response.json())
             .then ((res) => {
-                //console.log(res);
-                console.log("Daten geholt!");
+                console.log(res);
+                //console.log("Daten geholt!");
                 this.newData = res;
                 this.setState ({ ready: true });
             })
@@ -95,9 +106,11 @@ export default class Path extends React.Component {
         } else {       
             return (
                 <View style={styles.container}>
-                    <Text style={styles.text}> Ihr Ablauf ist wie folgt: </Text>
-                    <View style={styles.pathCont}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerTxt}> Ihr Ablauf ist wie folgt: </Text>
+                    </View>
 
+                    <View style={styles.pathCont}>
                         <Timeline 
                         navigation={this.props.navigation}
                         callbackFromParent={this.myCallback}
@@ -113,10 +126,12 @@ export default class Path extends React.Component {
                         }}
                         innerCircle={'dot'}
                         />
-                        
                     </View>
-                    <Text style={styles.text}> Noch {this.calcNextAppo()} Tage bis zum nächsten Termin.</Text>
+
+                    <View style={styles.bottom}>
+                        <Text style={styles.bottomTxt}> Noch {this.calcNextAppo()} Tage bis zum nächsten Termin.</Text>
                     </View>
+                </View>
             );
         }
 
@@ -137,23 +152,27 @@ const styles = StyleSheet.create({
         padding: 20,
         paddingTop:15,
         backgroundColor:'white'
-      },
-      list: {
-        flex: 1,
-        marginTop:20,
-      },
-      btn: {
-        alignSelf: 'stretch',
-        backgroundColor: '#01c853',
-        padding: 20,
-        alignItems: 'center',
     },
-    btn2: {
-        alignSelf: 'stretch',
-        backgroundColor: 'yellow',
-        padding: 20,
-        alignItems: 'center',
-        marginTop: 10,
-    }
+    list: {
+        flex: 1,
+    },
+    header: {
+        justifyContent :'center',
+        alignItems:'center',
+        paddingVertical: 15,
+     },
+    headerTxt: {
+        fontSize:18,
+    },
+    bottom: {
+        justifyContent :'center',
+        alignItems:'center',
+        paddingVertical: 20,
+        borderTopColor: 'black',
+        borderTopWidth: 1,
+    },
+    bottomTxt: {
+        fontSize:18,
+    },
 });
 
