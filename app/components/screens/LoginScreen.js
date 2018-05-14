@@ -19,7 +19,7 @@ export default class LoginScreen extends React.Component {
 
     logIn = () => {
         
-        fetch('http://147.87.116.42:54321/login/patient', {
+        fetch('http://147.87.117.66:1234/login/patient', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,7 +84,9 @@ export default class LoginScreen extends React.Component {
 
 	    		<View style={styles.signupTextCont}>
 					<Text style={styles.signupText}>Noch kein Account?</Text>
-					<TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Registrieren</Text></TouchableOpacity>
+					<TouchableOpacity onPress={() => alert("Nicht fertig implementiert.")}>
+                        <Text style={styles.signupButton}> Registrieren</Text>
+                    </TouchableOpacity>
 				</View>
 			</View>	
 

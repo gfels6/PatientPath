@@ -12,7 +12,6 @@ export default class Appointment extends React.Component {
 
     convertTime(dateString) {
         let day,month,year,hour,minute;
-        
         year = dateString.slice(0,4);
         month = dateString.slice(5,7);
         day = dateString.slice(8,10);
@@ -41,9 +40,9 @@ export default class Appointment extends React.Component {
 
                 <View style={styles.practicioner}>
                     <Text style={styles.head}> Fachperson </Text>
-                    <Text style={styles.text}> Rolle: {params.dataFromChild.practicioner.role}</Text>
-                    <Text style={styles.text}> Name: {params.dataFromChild.practicioner.title} {params.dataFromChild.practicioner.firstname} {params.dataFromChild.practicioner.lastname}</Text>
-                    <Text style={styles.text}> Email: {params.dataFromChild.practicioner.email}</Text>
+                    <Text style={styles.text}> Rolle: {params.dataFromChild.practitioner.role}</Text>
+                    <Text style={styles.text}> Name: {params.dataFromChild.practitioner.title} {params.dataFromChild.practitioner.firstname} {params.dataFromChild.practitioner.lastname}</Text>
+                    <Text style={styles.text}> Email: {params.dataFromChild.practitioner.email}</Text>
                 </View>
 
                 <View style={styles.institution}>
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#000',
+        fontSize: 16,
     },
     title: {
         fontSize:16,
@@ -111,5 +111,9 @@ const styles = StyleSheet.create({
         fontWeight:'500',
         color:'#ffffff',
         textAlign:'center',
+    },
+    head: {
+        fontWeight: "bold",
+        fontSize: 16,
     }
 });

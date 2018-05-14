@@ -82,7 +82,7 @@ export default class Path extends React.Component {
 
     getAppo = (tok) => {
 
-            fetch('http://147.87.116.42:54321/appointment/full', {
+            fetch('http://147.87.117.66:1234/appointment/full', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

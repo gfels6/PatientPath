@@ -19,16 +19,16 @@ export default class Cal extends React.Component {
                 <Text style={styles.text}> Mögliche Kalenderansicht (kann) </Text>
                 <Calendar
                         style={styles.calendar}
-                        current={'2018-04-04'}
+                        current={'2018-05-01'}
                         minDate={'2018-01-01'}
                         maxDate={'2018-12-31'}
                         firstDay={1}
                         markedDates={{
-                            '2018-04-07': {marked: true},
-                            '2018-04-09': {marked: true, dotColor: 'green'},
-                            '2018-04-10': {marked: true, dotColor: 'red'},
-                            '2018-04-14': {marked: true},
-                            '2018-04-19': {disabled: true, activeOpacity: 0}
+                            '2018-05-07': {marked: true},
+                            '2018-05-09': {marked: true, dotColor: 'green'},
+                            '2018-05-10': {marked: true, dotColor: 'red'},
+                            '2018-05-14': {marked: true},
+                            '2018-05-19': {disabled: true, activeOpacity: 0}
                         }}
                         // disabledByDefault={true}
                         hideArrows={true}
