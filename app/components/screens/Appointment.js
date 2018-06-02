@@ -1,30 +1,67 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
+import { returnToken } from '../auth';
+import { convertTime } from '../helper';
 
 export default class Appointment extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            changeRequest: false,
+        }
     }
 
     static navigationOptions = {
         drawerLabel: () => null
-   }
+    }
 
-    convertTime(dateString) {
-        let day,month,year,hour,minute;
-        year = dateString.slice(0,4);
-        month = dateString.slice(5,7);
-        day = dateString.slice(8,10);
-        hour = dateString.slice(11,13);
-        minute = dateString.slice(14,16);
-        
-        return day + "." + month + "." + year + " " + hour + ":" + minute;
+    componentWillMount(){
+            this.setState ({ changeRequest: this.props.navigation.state.params.dataFromChild.changerequest });
+    }
+
+    /*
+    static navigationOptions = {
+        drawerLabel: () => null
+    } */
+
+    changeRequest = () => {
+        let aid = this.props.navigation.state.params.dataFromChild.aid;
+
+        if (this.state.changeRequest) {
+            return (<Text style={styles.boldText}>Terminverschiebung beantragt!</Text>);
+        } else {
+            return (<TouchableOpacity style={styles.button}
+            onPress={() => returnToken().then((token) => {
+                this.setChangeRequest(token, aid);
+            })}>
+            <Text style={styles.buttonText}>Termin verschieben</Text>
+            </TouchableOpacity>);
+        }
+    }
+
+    setChangeRequest = (token, aid) => {
+        console.log('pid: ' + aid);
+        fetch('http://147.87.117.66:1234/appointment/'+aid, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token,
+                },
+                body: JSON.stringify({
+                        'changerequest': 'true'
+                })
+        })
+        .then((response) => response.json())
+        .then ((res) => {
+                console.log(res);
+                this.setState ({ changeRequest: true });
+        })
+        .done();
     }
 
     render() {
     
     const {params} = this.props.navigation.state;
-    console.log("works? " + params.dataFromChild.aid);
 
     return (
             <View style={styles.container}>
@@ -34,8 +71,8 @@ export default class Appointment extends React.Component {
 
                 <View style={styles.appData}>
                     <Text style={styles.text}> Beschreibung: {params.dataFromChild.description}</Text>
-                    <Text style={styles.text}> Startdatum: {this.convertTime(params.dataFromChild.startdate)}</Text>
-                    <Text style={styles.text}> Enddatum: {this.convertTime(params.dataFromChild.enddate)}</Text>
+                    <Text style={styles.text}> Startdatum: {convertTime(params.dataFromChild.startdate)}</Text>
+                    <Text style={styles.text}> Enddatum: {convertTime(params.dataFromChild.enddate)}</Text>
                 </View>
 
                 <View style={styles.practicioner}>
@@ -53,12 +90,7 @@ export default class Appointment extends React.Component {
                 </View>
 
                 <View style={styles.buttonCont}>
-                    <TouchableOpacity style={styles.button}
-                        onPress={() => {
-                            alert("Noch nicht implementiert! :(")
-                        }}>
-                        <Text style={styles.buttonText}>Termin verschieben</Text>
-                    </TouchableOpacity>
+                    {this.changeRequest()}
                 </View>
             </View>
     );
@@ -109,7 +141,13 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize:16,
         fontWeight:'500',
-        color:'#ffffff',
+        color:'#fff',
+        textAlign:'center',
+    },
+    boldText: {
+        fontSize:16,
+        fontWeight:'500',
+        color:'#000',
         textAlign:'center',
     },
     head: {

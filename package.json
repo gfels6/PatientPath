@@ -25,7 +25,7 @@
     "react-native": "0.52.0",
     "react-native-calendars": "^1.17.7",
     "react-native-timeline-listview": "^0.2.3",
-    "react-navigation": "^1.5.8",
+    "react-navigation": "^2.0.4",
     "redux": "^3.7.2"
   }
 }

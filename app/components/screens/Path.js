@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Header, Button, AsyncStorage, TouchableOpacity, Alert} from 'react-native';
 import Timeline from '../../extensions/timeline';
-
-var appDates = [];
+import { convertTime } from '../helper';
+import { returnToken } from '../auth';
 
 export default class Path extends React.Component {
 
@@ -10,7 +10,6 @@ export default class Path extends React.Component {
         super()
         this.state = {
             ready: false,
-            fetched: false,
          }
     }
 
@@ -19,8 +18,7 @@ export default class Path extends React.Component {
     }
 
     calcNextAppo = () => {
-        this.checkDates();
-
+        
         let closestDate = '';
         var currentDate = new Date();
         let tempCloseMs = 999999999999999;
@@ -42,24 +40,12 @@ export default class Path extends React.Component {
         return Math.ceil(tempCloseMs / one_day);
     }
 
-    convertTime(dateString) {
-        let day,month,year,hour,minute;
-        
-        year = dateString.slice(0,4);
-        month = dateString.slice(5,7);
-        day = dateString.slice(8,10);
-        hour = dateString.slice(11,13);
-        minute = dateString.slice(14,16);
-        
-        return day + "." + month + "." + year + " " + hour + ":" + minute;
-    }
-
     checkDates = () => {
         for(let aid of this.newData) {
             if(aid.modified === true) {
                 Alert.alert(
                     'Achtung Datumswechsel!',
-                    'Das Datum für den Termin "' + aid.name + '" hat auf das Datum ' + this.convertTime(aid.startdate) + ' gewechselt.',
+                    'Das Datum für den Termin "' + aid.name + '" hat auf das Datum ' + convertTime(aid.startdate) + ' gewechselt.',
                     [
                       {text: 'Später', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
                       {text: 'Verstanden', onPress: () => console.log('ok pressed')},
@@ -77,7 +63,7 @@ export default class Path extends React.Component {
     }
 
     myCallback = (dataFromChild) => {
-        this.props.navigation.navigate('Appointment', {dataFromChild});
+        this.props.navigation.navigate('Termin', {dataFromChild});
     }
 
     getAppo = (tok) => {
@@ -91,13 +77,12 @@ export default class Path extends React.Component {
             })
             .then((response) => response.json())
             .then ((res) => {
-                console.log(res);
-                //console.log("Daten geholt!");
+                console.log("Daten geholt!");
                 this.newData = res;
                 this.setState ({ ready: true });
+                this.checkDates();
             })
             .done();
-        
     }
 
     render() {
@@ -134,8 +119,6 @@ export default class Path extends React.Component {
                 </View>
             );
         }
-
-    
     }
 }
 

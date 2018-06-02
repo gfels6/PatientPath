@@ -1,9 +1,10 @@
 import React from "react";
 import { Platform, StatusBar, View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import {
-  StackNavigator,
-  SwitchNavigator,
-  DrawerNavigator,
+  createStackNavigator,
+  createSwitchNavigator,
+  createDrawerNavigator,
+  DrawerActions,
 } from "react-navigation";
 
 import LoginScreen from "./screens/LoginScreen";
@@ -15,9 +16,10 @@ import Profile from "./screens/Profile";
 import Appointment from "./screens/Appointment";
 
 const DrawerButton = (props) => {
+  //console.log(props);
 	return (
     <View>
-      <TouchableOpacity onPress={() => {props.navigation.navigate('DrawerOpen')}}>
+      <TouchableOpacity onPress={() => {props.navigation.dispatch(DrawerActions.toggleDrawer())}}>
         <Image
           source={require('../img/hamburgerW.png')}
           style={styles.icon}
@@ -31,7 +33,7 @@ const headerStyle = {
   marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
 };
 
-export const SignedOut = StackNavigator({
+export const SignedOut = createStackNavigator({
   LoginScreen: {
     screen: LoginScreen,
   },
@@ -47,22 +49,7 @@ export const SignedOut = StackNavigator({
    },
 );
 
- /*
-  const AppoStack = StackNavigator(
-    {
-      Appointment: { 
-        screen: Appointment,
-        title: "Pfad",
-      },
-    },
-    {
-      navigationOptions: ({navigation}) => ({
-        headerLeft: <DrawerButton navigation={navigation} />,
-      }),
-    }
-  ); */
-
-  const PathStack = StackNavigator(
+  const PathStack = createStackNavigator(
   {
     Path: { 
       screen: Path,
@@ -70,78 +57,43 @@ export const SignedOut = StackNavigator({
     },
     Appointment: {
       screen: Appointment,
-      title: "lol",
+      title: "Termin",
     }
   },
   {
-    navigationOptions: ({navigation}) => ({
-      headerLeft: <DrawerButton navigation={navigation} />,
-      headerStyle: {
-        backgroundColor: '#4682b4',
-      },
-      headerTitleStyle: {
-          color: 'white',
-      },
-      headerBackTitleStyle: {
-          color: 'white',
-      },
-      headerTintColor: 'white',
-      }),
-
     initialRouteName: 'Path',
   }
   );
 
-  const InstitutionStack = StackNavigator(
+const DrawerNav = createDrawerNavigator(
   {
-    Institution: { 
-      screen: Institution,
+    Pfad: {
+      screen: Path,
+      title: "Pfad",
     },
-  },
-  {
-    navigationOptions: ({navigation}) => ({
-      headerLeft: <DrawerButton navigation={navigation} />,
-      headerStyle: {
-        backgroundColor: '#4682b4',
-      },
-      headerTitleStyle: {
-          color: 'white',
-      },
-      headerBackTitleStyle: {
-          color: 'white',
-      },
-      headerTintColor: 'white',
-    }),
-  }
-  );  
-
-  const CalStack = StackNavigator(
-  {
-    Cal: { 
+    Kalender: {
       screen: Cal,
     },
+    Institution: {
+      screen: Institution,
+    },
+    Profil: {
+      screen: Profile,
+    },
+    Termin: {
+      screen: Appointment,
+    }
   },
   {
-    navigationOptions: ({navigation}) => ({
-      headerLeft: <DrawerButton navigation={navigation} />,
-      headerStyle: {
-        backgroundColor: '#4682b4',
-      },
-      headerTitleStyle: {
-          color: 'white',
-      },
-      headerBackTitleStyle: {
-          color: 'white',
-      },
-      headerTintColor: 'white',
-    }),
+    initialRouteName: 'Pfad',
+    drawerPosition: 'left',
   }
-  );
+);
 
-  const ProfileStack = StackNavigator(
+export const SignedIn = createStackNavigator(
   {
-    Profile: { 
-      screen: Profile,
+    Main: {
+      screen: DrawerNav,
     },
   },
   {
@@ -157,34 +109,13 @@ export const SignedOut = StackNavigator({
           color: 'white',
       },
       headerTintColor: 'white',
-  }),
-  }
-  );      
-
-export const SignedIn = DrawerNavigator(
-  {
-    Pfad: {
-      screen: PathStack,
-      title: "Pfad",
-    },
-    Kalender: {
-      screen: CalStack,
-    },
-    Institution: {
-      screen: InstitutionStack,
-    },
-    Profil: {
-      screen: ProfileStack,
-    },
-  },
-  {
-    initialRouteName: 'Pfad',
-    drawerPosition: 'left',
+    }),
   }
 );
 
+
 export const createRootNavigator = (signedIn = false) => {
-  return SwitchNavigator(
+  return createSwitchNavigator(
     {
       SignedIn: {
         screen: SignedIn

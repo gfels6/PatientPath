@@ -1,7 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View,Image} from 'react-native';
 
 export default class Institution extends React.Component {
+
+    static navigationOptions = {
+        drawerLabel: 'Institution',
+    };
 
     render() {
     return (

@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import {StyleSheet, ListView, Image, View, Text, TouchableOpacity, TouchableWithoutFeedback,} from "react-native";
 import { StackNavigator, withNavigation } from 'react-navigation';
+import { convertTime } from '../components/helper';
 
 const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,
@@ -50,18 +51,6 @@ export default class Timeline extends Component {
       data: nextProps.data,
       dataSource: ds.cloneWithRows(nextProps.data)
     });
-  }
-
-  convertTime(dateString) {
-    let day,month,year,hour,minute;
-    
-    year = dateString.slice(0,4);
-    month = dateString.slice(5,7);
-    day = dateString.slice(8,10);
-    hour = dateString.slice(11,13);
-    minute = dateString.slice(14,16);
-    
-    return day + "." + month + "." + year + " " + hour + ":" + minute;
   }
 
    render() {
@@ -155,7 +144,7 @@ export default class Timeline extends Component {
           {rowData.institution.name}
         </Text>
         <Text style={[styles.date, this.props.dateStyle]}>
-          {this.convertTime(rowData.startdate)}
+          {convertTime(rowData.startdate)}
         </Text>
         </View>
       </View>
@@ -171,7 +160,7 @@ export default class Timeline extends Component {
           {rowData.institution.name}
         </Text>
         <Text style={[styles.date, this.props.dateStyle]}>
-          {this.convertTime(rowData.startdate)}
+          {convertTime(rowData.startdate)}
         </Text>
         <Text style={[styles.date, this.props.dateStyle]}>
           hat eine Checklist
