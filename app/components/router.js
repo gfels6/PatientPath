@@ -16,7 +16,6 @@ import Profile from "./screens/Profile";
 import Appointment from "./screens/Appointment";
 
 const DrawerButton = (props) => {
-  //console.log(props);
 	return (
     <View>
       <TouchableOpacity onPress={() => {props.navigation.dispatch(DrawerActions.toggleDrawer())}}>
@@ -29,9 +28,7 @@ const DrawerButton = (props) => {
   );
 };
 
-const headerStyle = {
-  marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-};
+
 
 export const SignedOut = createStackNavigator({
   LoginScreen: {
@@ -49,30 +46,21 @@ export const SignedOut = createStackNavigator({
    },
 );
 
-  const PathStack = createStackNavigator(
-  {
-    Path: { 
-      screen: Path,
-      title: "Pfad",
-    },
-    Appointment: {
-      screen: Appointment,
-      title: "Termin",
-    }
-  },
-  {
-    initialRouteName: 'Path',
-  }
-  );
-
 const DrawerNav = createDrawerNavigator(
   {
     Pfad: {
       screen: Path,
-      title: "Pfad",
+      navigationOptions: {
+        drawerLabel: "Pfad",
+        title: "Pfadansicht",
+      }
     },
     Kalender: {
       screen: Cal,
+      navigationOptions: {
+        drawerLabel: "Cal",
+        title: "Call",
+      }
     },
     Institution: {
       screen: Institution,
@@ -98,8 +86,8 @@ export const SignedIn = createStackNavigator(
   },
   {
     navigationOptions: ({navigation}) => ({
-       headerLeft: <DrawerButton navigation={navigation} />,
-       headerStyle: {
+      headerLeft: <DrawerButton navigation={navigation} />,
+      headerStyle: {
         backgroundColor: '#4682b4',
       },
       headerTitleStyle: {

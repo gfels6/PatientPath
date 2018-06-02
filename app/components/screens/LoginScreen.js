@@ -13,10 +13,6 @@ export default class LoginScreen extends React.Component {
         }
     }
 
-    skip = () => {
-        this.props.navigation.navigate('Path');
-    }
-
     logIn = () => {
         
         fetch('http://147.87.117.66:1234/login/patient', {
@@ -34,7 +30,7 @@ export default class LoginScreen extends React.Component {
             if (resp.token) {
                 AsyncStorage.setItem('token', resp.token);
                 console.log("result from loginfetch: " + resp.token);
-                this.props.navigation.navigate('Path');
+                this.props.navigation.navigate('Pfad');
                 ToastAndroid.showWithGravity(
                     'Login erfolgreich!',
                     ToastAndroid.SHORT,
