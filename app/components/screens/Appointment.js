@@ -1,13 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, BackHandler } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, BackHandler, TouchableHighlight } from 'react-native';
 import { returnToken } from '../auth';
 import { convertTime } from '../helper';
+import Modal from 'react-native-modal';
+import { CheckBox } from 'react-native-elements';
 
 export default class Appointment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             changeRequest: false,
+            modalVisible: false,
+            hasChecklist: false,
+            ready: false,
+            checked: [],
         }
     }
 
@@ -17,6 +23,15 @@ export default class Appointment extends React.Component {
 
     componentWillMount(){
         this.setState ({ changeRequest: this.props.navigation.state.params.dataFromChild.changerequest });
+        if(this.props.navigation.state.params.dataFromChild.chklstid != null){
+            this.setState ({ hasChecklist: true });
+            returnToken().then((token) => {
+                this.getChecklistData(token,this.props.navigation.state.params.dataFromChild.chklstid);
+            });
+        }else{
+            this.setState ({ ready: true });
+        }
+
     }
 
     componentDidMount(){
@@ -30,6 +45,10 @@ export default class Appointment extends React.Component {
     onBackButtonPressAndroid = () => {
         this.props.navigation.navigate('Pfad');
         return true;
+    }
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
     }
 
     changeRequest = () => {
@@ -67,41 +86,116 @@ export default class Appointment extends React.Component {
         .done();
     }
 
+    getChecklistData = (token, cid) => {
+
+        fetch('http://147.87.117.66:1234/checklist/'+cid, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            },
+        })
+        .then((response) => response.json())
+        .then ((res) => {
+            console.log("Checklist geholt!");
+            //console.log(res);
+            this.checklist = res;
+            this.setState ({ ready: true });
+        })
+        .done();
+    }
+
+    _renderChecklistButton() {
+        if(this.state.hasChecklist == true){
+            return (<View style={styles.buttonCont}>
+            <TouchableOpacity style={styles.button}
+                onPress={() => {
+                    this.setModalVisible(true);
+                }}>
+                <Text style={styles.buttonText}>Checkliste anzeigen</Text>
+            </TouchableOpacity>
+            </View>)
+        }
+    }
+
+    _renderChecklistModal() {
+        if(this.state.hasChecklist == true){
+            return (
+                <Modal
+                    isVisible={this.state.modalVisible}>
+                    <View style={styles.modalContent}>
+                    <Text style={styles.text}>Checkliste</Text>
+
+                    {this._renderChecklistItems()}
+
+                    <TouchableOpacity onPress={() => {this.setModalVisible(false);}}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>Close</Text>
+                        </View>
+                    </TouchableOpacity>
+                    </View>
+                </Modal>
+            )
+        }
+    }
+
+    _renderChecklistItems() {
+
+        return this.checklist.checklistitems.map((data) => {
+             return (
+                <CheckBox
+                key={data.chklstitemid}
+                title={data.name}
+                checked={data.checked}
+                onPress={() => data.checked = !data.checked}
+                />
+            );
+        });
+    }
+
     render() {
     
     const {params} = this.props.navigation.state;
-
-    return (
+    if (!this.state.ready) {
+        return null;
+    } else {  
+        return (
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.title}> {params.dataFromChild.name}</Text>
                 </View>
 
                 <View style={styles.appData}>
-                    <Text style={styles.text}> Beschreibung: {params.dataFromChild.description}</Text>
-                    <Text style={styles.text}> Startdatum: {convertTime(params.dataFromChild.startdate)}</Text>
-                    <Text style={styles.text}> Enddatum: {convertTime(params.dataFromChild.enddate)}</Text>
+                    <Text style={styles.text}>{params.dataFromChild.description}</Text>
+                    <Text style={styles.text}>Startdatum: {convertTime(params.dataFromChild.startdate)}</Text>
+                    <Text style={styles.text}>Enddatum: {convertTime(params.dataFromChild.enddate)}</Text>
                 </View>
 
                 <View style={styles.practicioner}>
-                    <Text style={styles.head}> Fachperson </Text>
-                    <Text style={styles.text}> Rolle: {params.dataFromChild.practitioner.role}</Text>
-                    <Text style={styles.text}> Name: {params.dataFromChild.practitioner.title} {params.dataFromChild.practitioner.firstname} {params.dataFromChild.practitioner.lastname}</Text>
-                    <Text style={styles.text}> Email: {params.dataFromChild.practitioner.email}</Text>
+                    <Text style={styles.head}>Fachperson </Text>
+                    <Text style={styles.text}>Rolle: {params.dataFromChild.practitioner.role}</Text>
+                    <Text style={styles.text}>Name: {params.dataFromChild.practitioner.title} {params.dataFromChild.practitioner.firstname} {params.dataFromChild.practitioner.lastname}</Text>
+                    <Text style={styles.text}>Email: {params.dataFromChild.practitioner.email}</Text>
                 </View>
 
                 <View style={styles.institution}>
-                    <Text style={styles.head}> Institution </Text>
-                    <Text style={styles.text}> Name: {params.dataFromChild.institution.name}</Text>
-                    <Text style={styles.text}> Adresse: {params.dataFromChild.institution.address} </Text>
-                    <Text style={styles.text}> Telefon: {params.dataFromChild.institution.phone}</Text>
+                    <Text style={styles.head}>Institution </Text>
+                    <Text style={styles.text}>Name: {params.dataFromChild.institution.name}</Text>
+                    <Text style={styles.text}>Adresse: {params.dataFromChild.institution.address} </Text>
+                    <Text style={styles.text}>Telefon: {params.dataFromChild.institution.phone}</Text>
                 </View>
+
+                {this._renderChecklistButton()}
 
                 <View style={styles.buttonCont}>
                     {this.changeRequest()}
                 </View>
+
+                {this._renderChecklistModal()}
+
             </View>
-    );
+        );
+    }
     }
 }
 
@@ -126,13 +220,14 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
     appData: {
-
+        padding: 4
     },
     practicioner: {
-        marginVertical: 20,
+        marginVertical: 10,
+        padding: 4
     },
     institution: {
-        
+        padding: 4
     },
     buttonCont: {
         flexGrow: 1,
@@ -161,5 +256,13 @@ const styles = StyleSheet.create({
     head: {
         fontWeight: "bold",
         fontSize: 16,
-    }
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
 });

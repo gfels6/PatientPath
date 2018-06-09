@@ -45,7 +45,6 @@ export default class Timeline extends Component {
 
   calcNextAppo = () => {
     
-    console.log("works");
     let closestDate = '';
     var currentDate = new Date();
     let tempCloseMs = 999999999999999;
@@ -215,8 +214,8 @@ export default class Timeline extends Component {
   }
 
   _renderCircle(rowData, sectionID, rowID) {
-    console.log("In _renderCircle");
-    console.log(this.state.redCircle);
+    //console.log("In _renderCircle");
+    //console.log(this.state.redCircle);
 
     var circleSize = rowData.circleSize
       ? rowData.circleSize

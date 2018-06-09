@@ -14,7 +14,9 @@ export default class Path extends React.Component {
     }
 
     componentWillMount() {
-        this.getToken();
+        returnToken().then((token) => {
+            this.getAppo(token);
+        });
     }
 
     calcNextAppo = () => {
@@ -48,7 +50,7 @@ export default class Path extends React.Component {
                     'Das Datum für den Termin "' + aid.name + '" hat auf das Datum ' + convertTime(aid.startdate) + ' gewechselt.',
                     [
                       {text: 'Später', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                      {text: 'Verstanden', onPress: () => console.log('ok pressed')},
+                      {text: 'Verstanden', onPress: () => returnToken().then((token) => { this.setModifiedFalse(token, aid.aid)})},
                     ],
                     { cancelable: false }
                   )
@@ -56,10 +58,22 @@ export default class Path extends React.Component {
         }
     }
 
-    getToken() {
-        AsyncStorage.getItem("token").then((token) => {
-            this.getAppo(token);
+    setModifiedFalse = (token, aid) => {
+
+        fetch('http://147.87.117.66:1234/appointment/'+aid, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token,
+                },
+                body: JSON.stringify({
+                        'modified': 'false'
+                })
         })
+        .then((response) => response.json())
+        .then ((res) => {
+        })
+        .done(); 
     }
 
     myCallback = (dataFromChild) => {
