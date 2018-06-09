@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import { returnToken } from '../auth';
 import { convertTime } from '../helper';
 
@@ -16,13 +16,21 @@ export default class Appointment extends React.Component {
     }
 
     componentWillMount(){
-            this.setState ({ changeRequest: this.props.navigation.state.params.dataFromChild.changerequest });
+        this.setState ({ changeRequest: this.props.navigation.state.params.dataFromChild.changerequest });
     }
 
-    /*
-    static navigationOptions = {
-        drawerLabel: () => null
-    } */
+    componentDidMount(){
+        BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+    }
+
+    onBackButtonPressAndroid = () => {
+        this.props.navigation.navigate('Pfad');
+        return true;
+    }
 
     changeRequest = () => {
         let aid = this.props.navigation.state.params.dataFromChild.aid;

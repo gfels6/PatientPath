@@ -36,8 +36,33 @@ export default class Timeline extends Component {
       data: this.props.data,
       dataSource: ds.cloneWithRows(this.props.data),
       x: 0,
-      width: 0
+      width: 0,
+      redCircle: null,
     };
+
+    
+  }
+
+  calcNextAppo = () => {
+    
+    console.log("works");
+    let closestDate = '';
+    var currentDate = new Date();
+    let tempCloseMs = 999999999999999;
+    let rowId = null;
+
+     for(let aid of this.state.dataSource._dataBlob.s1) {
+        var tempDate = new Date(aid.startdate);
+        
+        if(tempDate.getTime() > currentDate) {
+            var diff = tempDate.getTime() - currentDate.getTime();
+            if (diff < tempCloseMs) {
+                tempCloseMs = diff;
+                rowId = aid.aid;
+            }
+        }
+    }
+    this.setState({redCircle: rowId})
   }
 
   routingToAppo = (data) => {
@@ -51,6 +76,11 @@ export default class Timeline extends Component {
       data: nextProps.data,
       dataSource: ds.cloneWithRows(nextProps.data)
     });
+    
+  }
+
+  componentWillMount() {
+    this.calcNextAppo();
   }
 
    render() {
@@ -72,16 +102,12 @@ export default class Timeline extends Component {
   _renderRow(rowData, sectionID, rowID) {
     let content = null;
 
-    switch (this.props.columnFormat) {
-      case "single-column-left":
-        content = (
-          <View style={[styles.rowContainer, this.props.rowContainerStyle]}>
-            {this.renderEvent(rowData, sectionID, rowID)}
-            {this.renderCircle(rowData, sectionID, rowID)}
-          </View>
-        );
-        break;
-    }
+      content = (
+        <View style={[styles.rowContainer, this.props.rowContainerStyle]}>
+          {this.renderEvent(rowData, sectionID, rowID)}
+          {this.renderCircle(rowData, sectionID, rowID)}
+        </View>
+      );
     return <View key={rowID}>{content}</View>;
   }
 
@@ -90,10 +116,19 @@ export default class Timeline extends Component {
       ? rowData.lineWidth
       : this.props.lineWidth;
     const isLast = this.props.renderFullLine ? !this.props.renderFullLine : this.state.data.slice(-1)[0] === rowData;
-    const lineColor = isLast
+    let lineColor = isLast
       ? "rgba(0,0,0,0)"
       : rowData.lineColor ? rowData.lineColor : this.props.lineColor;
     let opStyle = null;
+
+    
+    var tempDate2 = new Date(rowData.startdate);
+    var currentDate2 = new Date();
+
+    if(tempDate2.getTime() < currentDate2.getTime()){
+      lineColor = "rgb(169,169,169)";
+    }
+  
 
     opStyle = {
       borderColor: lineColor,
@@ -152,27 +187,37 @@ export default class Timeline extends Component {
     ) : (
       <TouchableWithoutFeedback onPressIn={() => this.routingToAppo(rowData)}>
         <View>
-        <View>
-        <Text style={[styles.name, this.props.nameStyle]}>
-          {rowData.name}
-        </Text>
-        <Text style={[styles.institution, this.props.institutionStyle]}>
-          {rowData.institution.name}
-        </Text>
-        <Text style={[styles.date, this.props.dateStyle]}>
-          {convertTime(rowData.startdate)}
-        </Text>
-        <Text style={[styles.date, this.props.dateStyle]}>
-          hat eine Checklist
-        </Text>
+          <View>
+            <View style={[styles.horizontal, this.props.horizontalStyle]}>
+              <Text style={[styles.name, this.props.nameStyle]}>
+              {rowData.name}
+              </Text>
+              <View style={styles.checkListContainer}>
+                <Image
+                  source={require('../img/checklist.png')}
+                  style={styles.icon}
+                />
+              </View>
+            </View>
+            <View>
+              <Text style={[styles.institution, this.props.institutionStyle]}>
+                {rowData.institution.name}
+              </Text>
+              <Text style={[styles.date, this.props.dateStyle]}>
+              {convertTime(rowData.startdate)}
+              </Text>
+            </View>
+          </View>
         </View>
-      </View>
       </TouchableWithoutFeedback>
     )
     return <View style={styles.container}>{name}</View>;
   }
 
   _renderCircle(rowData, sectionID, rowID) {
+    console.log("In _renderCircle");
+    console.log(this.state.redCircle);
+
     var circleSize = rowData.circleSize
       ? rowData.circleSize
       : this.props.circleSize ? this.props.circleSize : defaultCircleSize;
@@ -184,6 +229,16 @@ export default class Timeline extends Component {
       : this.props.lineWidth ? this.props.lineWidth : defaultLineWidth;
 
     var circleStyle = null;
+    var tempDate = new Date(rowData.startdate);
+    var currentDate = new Date();
+    
+    if(tempDate.getTime() < currentDate.getTime()){
+      circleColor = "rgb(169,169,169)";
+    }
+
+    if(this.state.redCircle == rowData.aid){
+      circleColor = "rgb(70,130,180)";
+    }
 
     circleStyle = {
       width: this.state.x ? circleSize : 0,
@@ -297,10 +352,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
-  tryHard: {
-    flexDirection: "column",
+  horizontal: {
+    flexDirection: "row",
     flex: 1,
-    //alignItems: 'stretch',
-    justifyContent: "center"
+    //alignItems: 'center',
+    //justifyContent: 'center',
   },
+  icon: {
+    width: 18,
+    height: 18
+  },
+  checkListContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 4,
+  }
 });

@@ -51,15 +51,13 @@ const DrawerNav = createDrawerNavigator(
     Pfad: {
       screen: Path,
       navigationOptions: {
-        drawerLabel: "Pfad",
-        title: "Pfadansicht",
+        drawerLabel: "Pfadansicht",
       }
     },
     Kalender: {
       screen: Cal,
       navigationOptions: {
-        drawerLabel: "Cal",
-        title: "Call",
+        drawerLabel: "Kalender",
       }
     },
     Institution: {
