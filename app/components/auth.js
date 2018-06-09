@@ -1,12 +1,16 @@
 import { AsyncStorage } from "react-native";
 
-export const USER_KEY = "token";
+/* author: gfels6
+** Hier wird die Authentifizierung geregelt seitens App
+*/
 
-export const onSignOut = () => AsyncStorage.removeItem(USER_KEY);
+// Löschen des Auth. Token
+export const onSignOut = () => AsyncStorage.removeItem("token");
 
+// Get Funktion zum holen des Tokens
 export const returnToken = () => {
   return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(USER_KEY)
+    AsyncStorage.getItem("token")
       .then(res => {
         if (res !== null) {
           resolve(res);
@@ -16,9 +20,10 @@ export const returnToken = () => {
   });
 }
 
+// Überprüfung ob man eingeloggt ist
 export const isSignedIn = () => {
   return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(USER_KEY)
+    AsyncStorage.getItem("token")
       .then(res => {
         if (res !== null) {
           resolve(true);

@@ -4,6 +4,9 @@ import { StackNavigator } from 'react-navigation';
 import { isSignedIn } from "../auth";
 
 export default class LoginScreen extends React.Component {
+    /* author: gfels6
+    ** View für das LogIn
+    */
 
     constructor(props) {
         super(props);
@@ -13,6 +16,8 @@ export default class LoginScreen extends React.Component {
         }
     }
 
+    // Überprüfung ob eingegebene Logindaten korrekt sind. 
+    // Falls korrekt => Setzen des Token in AsyncStorage und Weiterleitung nach Path
     logIn = () => {
         
         fetch('http://147.87.117.66:1234/login/patient', {
@@ -36,7 +41,6 @@ export default class LoginScreen extends React.Component {
                     ToastAndroid.SHORT,
                     ToastAndroid.CENTER
                 );
-    
             }
             else {
                 alert("Login nicht erfolgreich. Benutzername oder Passwort falsch!");

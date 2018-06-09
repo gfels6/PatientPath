@@ -5,6 +5,11 @@ import {StyleSheet, ListView, Image, View, Text, TouchableOpacity, TouchableWith
 import { StackNavigator, withNavigation } from 'react-navigation';
 import { convertTime } from '../components/helper';
 
+/* author: gfels6
+** Hier wird der Pfad erstellt bzw. gezeichnet
+** Müsste neugeschrieben werden, vieles wird nicht verwendet
+*/
+
 const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,
   sectionHeaderHasChanged: (s1, s2) => s1 !== s2
@@ -37,13 +42,12 @@ export default class Timeline extends Component {
       dataSource: ds.cloneWithRows(this.props.data),
       x: 0,
       width: 0,
-      redCircle: null,
+      firstCircle: null,
     };
-
-    
   }
 
-  calcNextAppo = () => {
+  // Überprüfung, welcher der nächste (in Zukunft liegende) Termin ist
+  checkNextAppointment = () => {
     
     let closestDate = '';
     var currentDate = new Date();
@@ -61,12 +65,11 @@ export default class Timeline extends Component {
             }
         }
     }
-    this.setState({redCircle: rowId})
+    this.setState({firstCircle: rowId})
   }
 
+  // Callback Funktion an Path JS zur Übergabe von Daten
   routingToAppo = (data) => {
-    //console.log(data.aid);
-    //this.props.navigation.navigate({ routeName: 'Appointment',  params: { category: '2' } });
     this.props.callbackFromParent(data);
   } 
 
@@ -79,7 +82,7 @@ export default class Timeline extends Component {
   }
 
   componentWillMount() {
-    this.calcNextAppo();
+    this.checkNextAppointment();
   }
 
    render() {
@@ -124,11 +127,11 @@ export default class Timeline extends Component {
     var tempDate2 = new Date(rowData.startdate);
     var currentDate2 = new Date();
 
+    // Setzen der Linie auf Grau falls Datum in Vergangenheit
     if(tempDate2.getTime() < currentDate2.getTime()){
       lineColor = "rgb(169,169,169)";
     }
   
-
     opStyle = {
       borderColor: lineColor,
       borderLeftWidth: lineWidth,
@@ -214,8 +217,6 @@ export default class Timeline extends Component {
   }
 
   _renderCircle(rowData, sectionID, rowID) {
-    //console.log("In _renderCircle");
-    //console.log(this.state.redCircle);
 
     var circleSize = rowData.circleSize
       ? rowData.circleSize
@@ -231,10 +232,12 @@ export default class Timeline extends Component {
     var tempDate = new Date(rowData.startdate);
     var currentDate = new Date();
     
+     // Setzen der Circle auf Grau falls Datum in Vergangenheit
     if(tempDate.getTime() < currentDate.getTime()){
       circleColor = "rgb(169,169,169)";
     }
 
+     // Setzen der Circle auf Hellblau falls erster Termin
     if(this.state.redCircle == rowData.aid){
       circleColor = "rgb(70,130,180)";
     }
@@ -304,7 +307,6 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     flex: 1,
-    //alignItems: 'stretch',
     justifyContent: "center"
   },
   circle: {
@@ -354,8 +356,6 @@ const styles = StyleSheet.create({
   horizontal: {
     flexDirection: "row",
     flex: 1,
-    //alignItems: 'center',
-    //justifyContent: 'center',
   },
   icon: {
     width: 18,

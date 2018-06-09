@@ -5,6 +5,9 @@ import { convertTime } from '../helper';
 import { returnToken } from '../auth';
 
 export default class Path extends React.Component {
+    /* author: gfels6
+    ** View für die Pfadansicht
+    */
 
     constructor(){
         super()
@@ -13,12 +16,15 @@ export default class Path extends React.Component {
          }
     }
 
+    // Direkter Aufruf bevor Rendering
     componentWillMount() {
         returnToken().then((token) => {
-            this.getAppo(token);
+            this.getAppointment(token);
         });
     }
 
+    // Berechnung der Anzahl Tage bis zum nächsten Termin
+    // Ist noch nicht ganz korrekt, da ein Runden geschieht.
     calcNextAppo = () => {
         
         let closestDate = '';
@@ -42,22 +48,47 @@ export default class Path extends React.Component {
         return Math.ceil(tempCloseMs / one_day);
     }
 
+    // Alle Termine werden auf Änderungen getestet.
+    // modified & olddate !== null   >>  Neuer Termin
+    // modified & olddate === null   >>  Terminwechsel
+    // modified & canceled == true   >>  Termin gecanceled
     checkDates = () => {
         for(let aid of this.newData) {
-            if(aid.modified === true) {
+            if(aid.modified === true && aid.olddate !== null) {
                 Alert.alert(
                     'Achtung Datumswechsel!',
-                    'Das Datum für den Termin "' + aid.name + '" hat auf das Datum ' + convertTime(aid.startdate) + ' gewechselt.',
+                    'Das Datum für den Termin "' + aid.name + '" hat vom ' + convertTime(aid.olddate) + ' auf das Datum ' + convertTime(aid.startdate) + ' gewechselt.',
                     [
                       {text: 'Später', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
                       {text: 'Verstanden', onPress: () => returnToken().then((token) => { this.setModifiedFalse(token, aid.aid)})},
                     ],
                     { cancelable: false }
                   )
+            } else if(aid.modified === true && aid.olddate === null) {
+                Alert.alert(
+                    'Achtung neuer Termin!',
+                    'Es wurde ein neuer Termin "' + aid.name + '" für den ' + convertTime(aid.startdate) + ' erfasst.',
+                    [
+                      {text: 'Später', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                      {text: 'Verstanden', onPress: () => returnToken().then((token) => { this.setModifiedFalse(token, aid.aid)})},
+                    ],
+                    { cancelable: false }
+                )
+            } else if(aid.modified === true && aid.deleted === true) {
+                Alert.alert(
+                    'Achtung Terminlöschung!',
+                    'Der Termin "' + aid.name + '" am ' + convertTime(aid.startdate) + ' wurde gelöscht.',
+                    [
+                      {text: 'Später', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                      {text: 'Verstanden', onPress: () => returnToken().then((token) => { this.setModifiedFalse(token, aid.aid)})},
+                    ],
+                    { cancelable: false }
+                )
             }
         }
     }
 
+    // Setzen des Modified flag auf false
     setModifiedFalse = (token, aid) => {
 
         fetch('http://147.87.117.66:1234/appointment/'+aid, {
@@ -76,17 +107,19 @@ export default class Path extends React.Component {
         .done(); 
     }
 
+    // Callback von timeline.js zur Übergabe von allen Terminen
     myCallback = (dataFromChild) => {
         this.props.navigation.navigate('Termin', {dataFromChild});
     }
 
-    getAppo = (tok) => {
+    // Get von allen Appointments zu dieser Person
+    getAppointment = (token) => {
 
             fetch('http://147.87.117.66:1234/appointment/full', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'token': tok,
+                    'token': token,
                 },
             })
             .then((response) => response.json())
@@ -99,6 +132,7 @@ export default class Path extends React.Component {
             .done();
     }
 
+    // Wird erst gerendert nach dem getAppointment Fetch
     render() {
         if (!this.state.ready) {
             return null;

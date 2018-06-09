@@ -3,6 +3,10 @@ import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpaci
 import { StackNavigator } from 'react-navigation';
 
 export default class LoginScreen extends React.Component {
+    /* author: gfels6
+    ** View für die Registrierung
+    ** Noch nicht implementiert
+    */
 
     constructor(props) {
         super(props);

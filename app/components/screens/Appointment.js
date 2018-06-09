@@ -6,6 +6,10 @@ import Modal from 'react-native-modal';
 import { CheckBox } from 'react-native-elements';
 
 export default class Appointment extends React.Component {
+    /* author: gfels6
+    ** View für Terminansicht
+    */
+
     constructor(props) {
         super(props);
         this.state = {
@@ -13,14 +17,15 @@ export default class Appointment extends React.Component {
             modalVisible: false,
             hasChecklist: false,
             ready: false,
-            checked: [],
         }
     }
 
+    // wird somit nicht im DrawerMenü als Eintrag angezeigt
     static navigationOptions = {
         drawerLabel: () => null
     }
 
+    // Falls eine Checkliste angehängt ist, wird diese gefechted und das ready flag für das rendering gesetzt.
     componentWillMount(){
         this.setState ({ changeRequest: this.props.navigation.state.params.dataFromChild.changerequest });
         if(this.props.navigation.state.params.dataFromChild.chklstid != null){
@@ -42,6 +47,7 @@ export default class Appointment extends React.Component {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
     }
 
+    // Workaround für AndroidBackButton
     onBackButtonPressAndroid = () => {
         this.props.navigation.navigate('Pfad');
         return true;
@@ -51,6 +57,7 @@ export default class Appointment extends React.Component {
         this.setState({modalVisible: visible});
     }
 
+    // Toggle von changeRequest, entweder Button oder Text JSX
     changeRequest = () => {
         let aid = this.props.navigation.state.params.dataFromChild.aid;
 
@@ -66,6 +73,7 @@ export default class Appointment extends React.Component {
         }
     }
 
+    // Setzen von ChangeRequest True in der DB und im State
     setChangeRequest = (token, aid) => {
         console.log('pid: ' + aid);
         fetch('http://147.87.117.66:1234/appointment/'+aid, {
@@ -86,6 +94,7 @@ export default class Appointment extends React.Component {
         .done();
     }
 
+    // Get von der Checklist. Wird in props 'checklist' gespeichert
     getChecklistData = (token, cid) => {
 
         fetch('http://147.87.117.66:1234/checklist/'+cid, {
@@ -105,6 +114,7 @@ export default class Appointment extends React.Component {
         .done();
     }
 
+    // Falls eine Checkliste vorhanden ist, soll der Button für das Modal angezeigt werden
     _renderChecklistButton() {
         if(this.state.hasChecklist == true){
             return (<View style={styles.buttonCont}>
@@ -118,6 +128,7 @@ export default class Appointment extends React.Component {
         }
     }
 
+    // Falls eine Checkliste vorhanden ist, soll das Modal erstellt werden.
     _renderChecklistModal() {
         if(this.state.hasChecklist == true){
             return (
@@ -139,6 +150,7 @@ export default class Appointment extends React.Component {
         }
     }
 
+    // Mit der map function werden alle Checklist Items in Checkboxen gerendert
     _renderChecklistItems() {
 
         return this.checklist.checklistitems.map((data) => {

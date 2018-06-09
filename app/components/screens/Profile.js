@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import { onSignOut } from "../auth";
 
 export default class Profile extends React.Component {
+    /* author: gfels6
+    ** View für die Profilsicht & Ausloggen
+    */
 
     render() {
     return (

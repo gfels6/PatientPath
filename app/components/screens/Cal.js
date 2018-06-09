@@ -8,10 +8,14 @@ LocaleConfig.locales['de'] = {
     dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
     dayNamesShort: ['So.','Mo.','Di.','Mi.','Do.','Fr.','Sa.']
   };
-  
+
   LocaleConfig.defaultLocale = 'de';
 
 export default class Cal extends React.Component {
+    /* author: gfels6
+    ** View für die Kalenderansicht
+    ** Noch nicht implementiert
+    */
 
     render() {
     return (

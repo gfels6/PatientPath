@@ -1,3 +1,8 @@
+/* author: gfels6
+** Helperfunktionen, die aus mehreren Views benötigt werden
+*/
+
+// Konvertierung des DB dateStrings in einen lesbaren dateString
 export const convertTime = (dateString) => {
     let day,month,year,hour,minute;
     year = dateString.slice(0,4);

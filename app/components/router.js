@@ -15,6 +15,13 @@ import Institution from "./screens/Institution";
 import Profile from "./screens/Profile";
 import Appointment from "./screens/Appointment";
 
+/* author: gfels6
+** Hier wird das komplette Routing geregelt
+** Menü, Header, etc.
+*/
+
+
+// Icon Oben Links im Header
 const DrawerButton = (props) => {
 	return (
     <View>
@@ -28,8 +35,7 @@ const DrawerButton = (props) => {
   );
 };
 
-
-
+// Navigation falls man ausgeloggt ist
 export const SignedOut = createStackNavigator({
   LoginScreen: {
     screen: LoginScreen,
@@ -76,6 +82,8 @@ const DrawerNav = createDrawerNavigator(
   }
 );
 
+// Workaround um ein Header zu erhalten
+// Zurzeit sind im DrawerNav keine Header möglich
 export const SignedIn = createStackNavigator(
   {
     Main: {
@@ -99,7 +107,7 @@ export const SignedIn = createStackNavigator(
   }
 );
 
-
+// Je nach LoginStatus wird entscheiden welcher Nav angezeigt wird
 export const createRootNavigator = (signedIn = false) => {
   return createSwitchNavigator(
     {

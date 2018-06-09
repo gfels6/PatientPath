@@ -2,6 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View,Image} from 'react-native';
 
 export default class Institution extends React.Component {
+    /* author: gfels6
+    ** View für die Institutionsansicht
+    ** Noch nicht implementiert
+    */
 
     static navigationOptions = {
         drawerLabel: 'Institution',
