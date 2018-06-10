@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpaci
 import { StackNavigator } from 'react-navigation';
 import { isSignedIn } from "../auth";
 
-export default class LoginScreen extends React.Component {
+export default class Login extends React.Component {
     /* author: gfels6
     ** View für das LogIn
     */
@@ -84,7 +84,7 @@ export default class LoginScreen extends React.Component {
 
 	    		<View style={styles.signupTextCont}>
 					<Text style={styles.signupText}>Noch kein Account?</Text>
-					<TouchableOpacity onPress={() => alert("Nicht fertig implementiert.")}>
+					<TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp') }>
                         <Text style={styles.signupButton}> Registrieren</Text>
                     </TouchableOpacity>
 				</View>

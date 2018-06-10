@@ -7,7 +7,7 @@ import {
   DrawerActions,
 } from "react-navigation";
 
-import LoginScreen from "./screens/LoginScreen";
+import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
 import Path from "./screens/Path";
 import Cal from "./screens/Cal";
@@ -37,8 +37,8 @@ const DrawerButton = (props) => {
 
 // Navigation falls man ausgeloggt ist
 export const SignedOut = createStackNavigator({
-  LoginScreen: {
-    screen: LoginScreen,
+  Login: {
+    screen: Login,
   },
   SignUp: {
     screen: SignUp,

@@ -29,23 +29,25 @@ export default class Path extends React.Component {
         
         let closestDate = '';
         var currentDate = new Date();
+        currentDate.setHours(0,0,0,0);
         let tempCloseMs = 999999999999999;
         var one_day = 1000*60*60*24;
 
         for(let aid of this.newData) {
-            //console.log("aid: " + aid.startdate);
             var tempDate = new Date(aid.startdate);
+            tempDate.setHours((tempDate.getTimezoneOffset()/-60),0,0,0);
+            console.log(tempDate);
             
-            if(tempDate.getTime() > currentDate) {
+            if(tempDate.getTime() > currentDate.getTime()) {
                 var diff = tempDate.getTime() - currentDate.getTime();
                 if (diff < tempCloseMs) {
                     tempCloseMs = diff;
                 }
             }
         }
-        //console.log("closest ms: " + tempCloseMs);
-        //console.log("in days: " + Math.ceil(tempCloseMs / one_day));
-        return Math.ceil(tempCloseMs / one_day);
+        console.log("closest ms: " + tempCloseMs);
+        console.log("in days: " + Math.ceil(tempCloseMs / one_day));
+        return Math.round(tempCloseMs / one_day);
     }
 
     // Alle Termine werden auf Änderungen getestet.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage} from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage, Image, Alert, ToastAndroid} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 export default class LoginScreen extends React.Component {
@@ -11,84 +11,181 @@ export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            firstname: '',
+            lastname: '',
             username: '',
             password: '',
+            birthdate: '',
         }
+    }
+
+    signUp = () => {
+
+        if(this.state.firstname == '' || this.state.lastname == '' || this.state.username == '' || this.state.password == '' || this.state.birthdate == ''){
+            Alert.alert(
+                'Fehlende Angaben',
+                'Es wurden nicht alle Angaben ausgefüllt.',
+                [
+                  {text: 'Verstanden',},
+                ],
+                { cancelable: false }
+              )
+              
+              return;
+        }
+
+        fetch('http://147.87.117.66:1234/signup/patient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password,
+                firstname: this.state.firstname,
+                lastname: this.state.lastname,
+                birthdate: this.state.birthdate,
+            })
+        })
+        .then((response) => response.json())
+        .then ((resp) => {
+            console.log(resp);
+            this.props.navigation.navigate('Login');
+            ToastAndroid.showWithGravity(
+                'Registrierung erfolgreich!',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+        })
+        .done();
     }
 
     render() {
     return (
-      <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
+        <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
             <View style={styles.container}>
-                <Text style={styles.header}> Registrieren </Text>
-                <TextInput 
-                    style={styles.textInput} placeholder='Username' 
-                    underlineColorAndroid='transparent'
-                />
-                <TextInput 
-                    style={styles.textInput} placeholder='Password' 
-                    underlineColorAndroid='transparent'
-                    secureTextEntry={true}
-                />
+                <View style={styles.picContainer}>
+                    <Image  style={{width:70, height: 70}}
+                        source={require('../../img/route.png')}/>
+                    <Text style={styles.logoText}>Registrierung für PatientPath!</Text>	
+                </View>
 
-               <TextInput 
-                    style={styles.textInput} placeholder='Password again' 
-                    underlineColorAndroid='transparent'
-                    secureTextEntry={true}
-                />
+                <View style={styles.formContainer}>
+                    <TextInput 
+                        style={styles.inputBox} placeholder='Vorname' 
+                        onChangeText={ (firstname) => this.setState({firstname}) }
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        placeholderTextColor = "#ffffff" 
+                    />
+                    <TextInput 
+                        style={styles.inputBox} placeholder='Nachname' 
+                        onChangeText={ (lastname) => this.setState({lastname}) }
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        placeholderTextColor = "#ffffff" 
+                    />
+                    <TextInput 
+                        style={styles.inputBox} placeholder='Geburtstag (yyyy-mm-dd)' 
+                        onChangeText={ (birthdate) => this.setState({birthdate}) }
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        placeholderTextColor = "#ffffff" 
+                    />
+                    <TextInput 
+                        style={styles.inputBox} placeholder='Benutzername' 
+                        onChangeText={ (username) => this.setState({username}) }
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        placeholderTextColor = "#ffffff" 
+                    />
+                    <TextInput 
+                        style={styles.inputBox} placeholder='Passwort' 
+                        onChangeText={ (password) => this.setState({password}) }
+                        secureTextEntry={true}
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        placeholderTextColor = "#ffffff"
+                    />
+ 
+                    <TouchableOpacity style={styles.button} onPress={this.signUp}>
+                        <Text style={styles.buttonText}>Registrieren</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={this.signUp}>
-                    <Text>Registrieren</Text>
-                </TouchableOpacity>
+                </View>
 
-            </View>
-      </KeyboardAvoidingView>
+                <View style={styles.signupTextCont}>
+					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login') }>
+                        <Text style={styles.signupButton}>Zurück zu Login</Text>
+                    </TouchableOpacity>
+				</View>
+
+            </View>	
+
+        </KeyboardAvoidingView>
     );
     }
 
-    signUp = () => {
-        alert("signUp not implemented yet");
-    }
 }
 
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
     },
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#2896d3',
-        paddingLeft: 40,
-        paddingRight: 40,
-    },
-    header: {
-        fontSize: 24,
-        marginBottom: 60,
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    textInput: {
-        alignSelf: 'stretch',
-        padding: 16,
-        marginBottom: 20,
-        backgroundColor: '#fff',
-    },
-    btn: {
-        alignSelf: 'stretch',
-        backgroundColor: '#01c853',
-        padding: 20,
-        alignItems: 'center',
-    },
-    btn2: {
-        alignSelf: 'stretch',
-        backgroundColor: 'yellow',
-        padding: 20,
-        alignItems: 'center',
-        marginTop: 10,
-    }
-});
 
+    picContainer : {
+        flexGrow: 1,
+        justifyContent:'flex-end',
+        alignItems: 'center'
+      },
+      logoText : {
+          marginVertical: 15,
+          fontSize:18,
+          color:'rgba(255, 255, 255, 0.7)'
+      },
+      container : {
+        backgroundColor:'#4682b4',
+        flex: 1,
+        alignItems:'center',
+        justifyContent :'center'
+      },
+      signupTextCont : {
+          flexGrow: 1,
+        alignItems:'flex-end',
+        justifyContent :'center',
+        paddingVertical:16,
+        flexDirection:'row'
+      },
+      signupText: {
+          color:'rgba(255,255,255,0.6)',
+          fontSize:16
+      },
+      signupButton: {
+          color:'#ffffff',
+          fontSize:16,
+          fontWeight:'500'
+      },
+      formContainer : {
+        flexGrow: 1,
+        justifyContent:'center',
+        alignItems: 'center'
+      },
+    
+      inputBox: {
+        width:300,
+        backgroundColor:'rgba(255, 255,255,0.2)',
+        borderRadius: 25,
+        paddingHorizontal:16,
+        fontSize:16,
+        color:'#ffffff',
+        marginVertical: 10
+      },
+      button: {
+        width:300,
+        backgroundColor:'#1c313a',
+         borderRadius: 25,
+          marginVertical: 10,
+          paddingVertical: 13
+      },
+      buttonText: {
+        fontSize:16,
+        fontWeight:'500',
+        color:'#ffffff',
+        textAlign:'center'
+      }
+});

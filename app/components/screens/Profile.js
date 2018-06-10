@@ -12,7 +12,7 @@ export default class Profile extends React.Component {
             <View style={styles.container}>
                  <TouchableOpacity style={styles.button}
                     onPress={() => {
-                        onSignOut().then(() => this.props.navigation.navigate('LoginScreen'))
+                        onSignOut().then(() => this.props.navigation.navigate('Login'))
                       }}>
                     <Text style={styles.buttonText}>Ausloggen</Text>
                 </TouchableOpacity>
