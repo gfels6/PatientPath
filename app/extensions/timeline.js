@@ -238,7 +238,7 @@ export default class Timeline extends Component {
     }
 
      // Setzen der Circle auf Hellblau falls erster Termin
-    if(this.state.redCircle == rowData.aid){
+    if(this.state.firstCircle == rowData.aid){
       circleColor = "rgb(70,130,180)";
     }
 

@@ -36,7 +36,7 @@ export default class Path extends React.Component {
         for(let aid of this.newData) {
             var tempDate = new Date(aid.startdate);
             tempDate.setHours((tempDate.getTimezoneOffset()/-60),0,0,0);
-            console.log(tempDate);
+            //console.log(tempDate);
             
             if(tempDate.getTime() > currentDate.getTime()) {
                 var diff = tempDate.getTime() - currentDate.getTime();
@@ -45,8 +45,8 @@ export default class Path extends React.Component {
                 }
             }
         }
-        console.log("closest ms: " + tempCloseMs);
-        console.log("in days: " + Math.ceil(tempCloseMs / one_day));
+        //console.log("closest ms: " + tempCloseMs);
+        //console.log("in days: " + Math.ceil(tempCloseMs / one_day));
         return Math.round(tempCloseMs / one_day);
     }
 
